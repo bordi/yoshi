@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { translate } from 'react-i18next';
-import s from './App.scss';
+import { withTranslation } from '@wix/wix-i18n-config';
 import { notifyViewFinishedLoading } from '@wix/business-manager-api';
 import { create } from '@wix/fedops-logger';
 import { COMPONENT_NAME } from '../../config';
+import s from './App.scss';
 
 class App extends React.Component {
   static propTypes = {
@@ -31,4 +31,4 @@ class App extends React.Component {
   }
 }
 
-export default translate(null, { wait: true })(App);
+export default withTranslation(null, { wait: true })(App);
