@@ -1,8 +1,11 @@
 import React, { FC, useRef, useMemo } from 'react';
-import { notifyViewStartLoading } from '@wix/business-manager-api';
+import {
+  notifyViewStartLoading,
+  TModuleParams,
+} from '@wix/business-manager-api';
 import { wixAxiosConfig } from '@wix/wix-axios-config';
 import { I18nextProvider, initI18n } from '@wix/wix-i18n-config';
-import { COMPONENT_NAME, IBMModuleParams } from './config';
+import { COMPONENT_NAME } from './config';
 import App from './components/App';
 
 const useOnce = (cb: () => void) => {
@@ -14,7 +17,7 @@ const useOnce = (cb: () => void) => {
   }
 };
 
-const AppContainer: FC<IBMModuleParams> = ({ locale }) => {
+const AppContainer: FC<TModuleParams> = ({ locale = 'en' }) => {
   useOnce(() => notifyViewStartLoading(COMPONENT_NAME));
 
   const i18n = useMemo(

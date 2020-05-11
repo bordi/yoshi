@@ -8,20 +8,13 @@
       "route": "{%projectName%}"
     }
   ],
-  "config": {
-    "topology": {
-      "staticsUrl": {
-        "artifactId": "com.wixpress.{%projectName%}"
-      }
-    }
-  },
   "bundles": [
     {
-      "file": { 
+      "file": {
         "artifactId": "com.wixpress.{%projectName%}",
         "path": "module.bundle.min.js"
       },
-      "debugFile": { 
+      "debugFile": {
         "artifactId": "com.wixpress.{%projectName%}",
         "path": "module.bundle.js"
       }

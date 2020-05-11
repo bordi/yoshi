@@ -14,7 +14,7 @@ const useOnce = cb => {
   }
 };
 
-const AppContainer = ({ locale }) => {
+const AppContainer = ({ locale = 'en' }) => {
   useOnce(() => notifyViewStartLoading(COMPONENT_NAME));
 
   const i18n = useMemo(
