@@ -21,8 +21,8 @@ const AppContainer: FC<IBMModuleParams> = ({ locale }) => {
     () =>
       initI18n({
         locale,
-        asyncMessagesLoader: locale2 =>
-          import(`./assets/locale/messages_${locale2}.json`),
+        asyncMessagesLoader: () =>
+          import(`./assets/locale/messages_${locale}.json`),
       }),
     [locale],
   );
