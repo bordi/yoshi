@@ -17,6 +17,4 @@ jobs:
         run: |
          git config --global user.name "${{ secrets.GH_NAME }}"
          git config --global user.email "${{ secrets.GH_EMAIL }}"
-         yarn --cwd './website' run publish-gh-pages
-        env:
-          GIT_USER: ${{ secrets.GH_NAME }}
+         GIT_USER="${{ secrets.GH_NAME }}" yarn --cwd './website' run publish-gh-pages
