@@ -14,4 +14,4 @@ jobs:
         run: yarn --cwd './website'
 
       - name: Deploy 🚀
-        run: GIT_USER=$GITHUB_ACTOR GITHUB_HOST=${{ secrets.GITHUB_TOKEN }} yarn --cwd './website' run publish-gh-pages
+        run: GIT_USER=github_action GITHUB_HOST=${{ secrets.GITHUB_TOKEN }} yarn --cwd './website' run publish-gh-pages
