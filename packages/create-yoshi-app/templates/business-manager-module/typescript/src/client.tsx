@@ -1,4 +1,4 @@
-import React, { FC, useRef, useMemo } from 'react';
+import React, { FC, useMemo, useEffect } from 'react';
 import {
   notifyViewStartLoading,
   TModuleParams,
@@ -8,17 +8,10 @@ import { I18nextProvider, initI18n } from '@wix/wix-i18n-config';
 import { COMPONENT_NAME } from './config';
 import App from './components/App';
 
-const useOnce = (cb: () => void) => {
-  const ref = useRef(false);
-
-  if (!ref.current) {
-    ref.current = true;
-    cb();
-  }
-};
-
 const AppContainer: FC<TModuleParams> = ({ locale = 'en' }) => {
-  useOnce(() => notifyViewStartLoading(COMPONENT_NAME));
+  useEffect(() => {
+    notifyViewStartLoading(COMPONENT_NAME);
+  }, []);
 
   const i18n = useMemo(
     () =>
