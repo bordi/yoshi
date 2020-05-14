@@ -48,7 +48,7 @@
   "dependencies": {
     "@wix/fedops-logger": "^3.0.5",
     "@wix/wix-axios-config": "latest",
-    "@wix/wix-i18n-config": "^4.0.0",
+    "@wix/wix-i18n-config": "^5.0.0",
     "yoshi-server": "^4.56.0",
     "yoshi-server-client": "^4.56.0"
   },
