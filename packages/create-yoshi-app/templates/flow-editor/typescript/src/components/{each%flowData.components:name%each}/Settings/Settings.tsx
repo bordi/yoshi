@@ -1,15 +1,20 @@
 import React from 'react';
 import { IWixStatic } from '@wix/native-components-infra/dist/src/types/wix-sdk';
-import './Settings.global.scss';
+import { iframeAppBiLoggerFactory } from '@wix/iframe-app-bi-logger';
 import { get } from 'lodash';
-import { WixSDK } from 'yoshi-flow-editor-runtime';
+import { WixSDK, BILogger, BILoggerProvider } from 'yoshi-flow-editor-runtime';
 import {
   Slider,
   ColorPickerColorSpace,
   Divider,
   TextLabel,
 } from '@wix/wix-base-ui';
+// Replace this line with real schema initializer
+import initSchemaLogger, { IExampleBILogger } from '../../../config/bi';
+import './Settings.global.scss';
 import css from './Settings.scss';
+
+const biLogger = initSchemaLogger(iframeAppBiLoggerFactory);
 
 interface ISettingsProps {
   Wix: IWixStatic;
@@ -56,7 +61,10 @@ export class Settings extends React.Component<ISettingsProps> {
     this.setState({ buttonBackgroundColor });
   };
 
-  updateHeaderFontSize = (fontSize: string) => {
+  updateHeaderFontSizeWithLogger = (biLogger: IExampleBILogger) => (
+    fontSize: string,
+  ) => {
+    biLogger.exampleBILog();
     this.props.Wix.Styles.setFontParam('fontSize', {
       value: {
         family: 'roboto-bold',
@@ -93,10 +101,14 @@ export class Settings extends React.Component<ISettingsProps> {
             value="Font size (px)"
             shouldTranslate={false}
           />
-          <Slider
-            value={this.state.fontSize}
-            onChange={this.updateHeaderFontSize}
-          />
+          <BILogger>
+            {(logger: IExampleBILogger) => (
+              <Slider
+                value={this.state.fontSize}
+                onChange={this.updateHeaderFontSizeWithLogger(logger)}
+              />
+            )}
+          </BILogger>
         </section>
         <section className={css.section}>
           <TextLabel
@@ -117,5 +129,7 @@ export class Settings extends React.Component<ISettingsProps> {
 }
 
 export default () => (
-  <WixSDK isEditor>{({ Wix }) => <Settings Wix={Wix} />}</WixSDK>
+  <BILoggerProvider logger={biLogger}>
+    <WixSDK isEditor>{({ Wix }) => <Settings Wix={Wix} />}</WixSDK>
+  </BILoggerProvider>
 );

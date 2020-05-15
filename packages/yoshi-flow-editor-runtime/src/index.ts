@@ -13,5 +13,10 @@ export * from './react/SDK/SDKContext';
 export * from './react/SDK/SDKRenderProp';
 export * from './react/SDK/useSDK';
 
+export * from './react/BILogger/BILoggerContext';
+export * from './react/BILogger/BILoggerProvider';
+export * from './react/BILogger/BILoggerRenderProp';
+export * from './react/BILogger/useBILogger';
+
 export * from './react/ErrorBoundary';
 export { getEditorParams, isEditor } from './utils';

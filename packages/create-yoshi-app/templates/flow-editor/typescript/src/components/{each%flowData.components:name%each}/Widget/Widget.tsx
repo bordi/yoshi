@@ -5,10 +5,14 @@ import {
   InjectedExperimentsProps,
 } from '@wix/wix-experiments-react';
 import { ExperimentsBag } from '@wix/wix-experiments';
-
 import { TPAComponentsProvider } from 'wix-ui-tpa/TPAComponentsConfig';
+import { BILoggerProvider } from 'yoshi-flow-editor-runtime';
 import { Button } from 'wix-ui-tpa/Button';
+import webBiLogger from '@wix/web-bi-logger';
+import initSchemaLogger from '../../../config/bi';
 import styles from './Widget.st.css';
+
+const biLogger = initSchemaLogger(webBiLogger);
 
 export default class extends React.Component<{
   name: string;
@@ -19,11 +23,13 @@ export default class extends React.Component<{
     const { name, experiments, mobile } = this.props;
 
     return (
-      <ExperimentsProvider options={{ experiments }}>
-        <TPAComponentsProvider value={{ mobile }}>
-          <Widget name={name} />
-        </TPAComponentsProvider>
-      </ExperimentsProvider>
+      <BILoggerProvider logger={biLogger}>
+        <ExperimentsProvider options={{ experiments }}>
+          <TPAComponentsProvider value={{ mobile }}>
+            <Widget name={name} />
+          </TPAComponentsProvider>
+        </ExperimentsProvider>
+      </BILoggerProvider>
     );
   }
 }
