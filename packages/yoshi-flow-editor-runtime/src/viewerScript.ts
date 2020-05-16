@@ -51,7 +51,7 @@ function ooiControllerWrapper(
   controllerConfig: IWidgetControllerConfig,
   appData: any,
 ) {
-  const { setProps } = controllerConfig;
+  const { setProps, appParams, platformAPIs } = controllerConfig;
 
   const setState = (newState: any) => {
     const updatedState = {
@@ -78,11 +78,18 @@ function ooiControllerWrapper(
     setState,
   };
 
+  const { appDefinitionId } = appParams;
+  const fedopsLogger = platformAPIs.fedOpsLoggerFactory?.getLoggerForWidget({
+    appId: appDefinitionId,
+    widgetId: controllerDescriptor.id,
+  });
+
   const userControllerPromise = controllerDescriptor.method.call(context, {
     controllerConfig,
     frameworkData,
     appData,
     reportError,
+    fedopsLogger,
   });
 
   const wrappedController = Promise.resolve(userControllerPromise).then(

@@ -1,5 +1,6 @@
 import Experiments from '@wix/wix-experiments';
 import { EXPERIMENTS_SCOPE } from '../../config/constants';
+import { id as widgetId } from './.component.json';
 
 export interface ControllerConfig {
   appParams: any;
@@ -12,6 +13,7 @@ export interface ControllerContext {
   appData?: Promise<any>;
   widgetConfig?: any;
   controllerConfig: ControllerConfig;
+  fedopsLogger: any;
 }
 
 function getSiteLanguage({ wixCodeApi }: ControllerConfig) {
@@ -27,6 +29,10 @@ function isMobile({ wixCodeApi }: ControllerConfig) {
   return wixCodeApi.window.formFactor === 'Mobile';
 }
 
+function isSSR({ wixCodeApi }: ControllerConfig): boolean {
+  return wixCodeApi.window.rendering.env === 'backend';
+}
+
 async function getExperimentsByScope(scope: string) {
   const experiments = new Experiments({
     scope,
@@ -35,12 +41,17 @@ async function getExperimentsByScope(scope: string) {
   return experiments.all();
 }
 
-async function createController({ controllerConfig }: ControllerContext) {
+async function createController({
+  controllerConfig,
+  fedopsLogger,
+}: ControllerContext) {
   const { appParams, setProps } = controllerConfig;
   const language = getSiteLanguage(controllerConfig);
   const mobile = isMobile(controllerConfig);
   const experiments = await getExperimentsByScope(EXPERIMENTS_SCOPE);
   const { baseUrls = {} } = appParams;
+
+  fedopsLogger.appLoadStarted();
 
   return {
     async pageReady() {
@@ -51,6 +62,11 @@ async function createController({ controllerConfig }: ControllerContext) {
         mobile,
         experiments,
       });
+
+      // report loaded SSR of widget
+      if (isSSR(controllerConfig)) {
+        fedopsLogger({ appId: appParams.appDefinitionId, widgetId });
+      }
     },
   };
 }

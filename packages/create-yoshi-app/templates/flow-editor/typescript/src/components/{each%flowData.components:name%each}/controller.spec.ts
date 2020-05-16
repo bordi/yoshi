@@ -24,6 +24,10 @@ describe('createController', () => {
     const formFactor: string = 'Desktop';
     const experiments = { someExperiment: 'true' };
     const mobile = formFactor === 'Mobile';
+    const fedopsLogger = {
+      appLoaded: () => {},
+      appLoadStarted: () => {},
+    };
     const controllerConfig: ControllerConfig = {
       appParams,
       setProps: setPropsSpy,
@@ -40,7 +44,10 @@ describe('createController', () => {
       },
     };
 
-    const controller = await createAppController({ controllerConfig });
+    const controller = await createAppController({
+      controllerConfig,
+      fedopsLogger,
+    });
 
     await controller.pageReady();
 
