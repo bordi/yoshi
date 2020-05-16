@@ -1,7 +1,11 @@
 import LaboratoryTestkit from '@wix/wix-experiments/dist/src/laboratory-testkit';
 import { ExperimentsBag } from '@wix/wix-experiments';
+import { IWidgetControllerConfig } from '@wix/native-components-infra/dist/src/types/types';
+import translations from '../../assets/locales/messages_en.json';
+import { appName } from '../../../.application.json';
 import { EXPERIMENTS_SCOPE } from '../../config/constants';
-import createAppController, { ControllerConfig } from './controller';
+import getControllerConfigMock from '../../../__tests__/helpers/controllerConfig.mock';
+import createAppController from './controller';
 
 export function mockExperiments(scope: string, experiments: ExperimentsBag) {
   new LaboratoryTestkit()
@@ -15,41 +19,31 @@ describe('createController', () => {
   it('should call setProps with data', async () => {
     mockExperiments(EXPERIMENTS_SCOPE, { someExperiment: 'true' });
     const setPropsSpy = jest.fn();
-    const appParams = {
-      baseUrls: {
-        staticsBaseUrl: 'http://some-static-url.com',
-      },
-    };
-    const language = 'en-US';
-    const formFactor: string = 'Desktop';
+    const language = 'en';
     const experiments = { someExperiment: 'true' };
-    const mobile = formFactor === 'Mobile';
-    const controllerConfig: ControllerConfig = {
-      appParams,
+    const controllerConfig: IWidgetControllerConfig = getControllerConfigMock({
       setProps: setPropsSpy,
-      wixCodeApi: {
-        window: {
-          formFactor,
-          multilingual: {
-            isEnabled: false,
-          },
-        },
-        site: {
-          language,
+      appParams: {
+        instance: '1',
+        instanceId: '1',
+        appDefinitionId: 'APP_DEF_ID',
+        baseUrls: {
+          staticsBaseUrl: 'http://some-static-url.com',
         },
       },
-    };
+    });
 
     const controller = await createAppController({ controllerConfig });
 
     await controller.pageReady();
 
     expect(setPropsSpy).toBeCalledWith({
-      name: 'World',
-      cssBaseUrl: appParams.baseUrls.staticsBaseUrl,
+      appName,
+      cssBaseUrl: controllerConfig.appParams.baseUrls.staticsBaseUrl,
       language,
       experiments,
-      mobile,
+      mobile: false,
+      translations,
     });
   });
 });

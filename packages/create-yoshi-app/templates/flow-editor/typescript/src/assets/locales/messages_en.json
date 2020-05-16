@@ -1,3 +1,4 @@
 {
-  "app.hello": "Hello"
+  "app.widget.welcome": "Welcome",
+  "app.settings.label": "Configure Widget"
 }

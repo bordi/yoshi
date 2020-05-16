@@ -1,16 +1,17 @@
 import React from 'react';
 import { IWixStatic } from '@wix/native-components-infra/dist/src/types/wix-sdk';
+import {
+  I18nextProvider,
+  translate,
+  InjectedTranslateProps,
+} from 'react-i18next';
 import { iframeAppBiLoggerFactory } from '@wix/iframe-app-bi-logger';
 import { get } from 'lodash';
 import { WixSDK, BILogger, BILoggerProvider } from 'yoshi-flow-editor-runtime';
-import {
-  Slider,
-  ColorPickerColorSpace,
-  Divider,
-  TextLabel,
-} from '@wix/wix-base-ui';
+import { ColorPickerColorSpace, TextLabel } from '@wix/wix-base-ui';
 // Replace this line with real schema initializer
 import initSchemaLogger, { IExampleBILogger } from '../../../config/bi';
+import i18n, { getLanguageWithInstance } from '../../../config/i18n';
 import './Settings.global.scss';
 import css from './Settings.scss';
 
@@ -25,6 +26,14 @@ const defaultSettingsValues = {
   buttonBackgroundColor: '#ffffff',
   fontSize: 14,
 };
+
+const SettingsLabel = translate()(({ t }: InjectedTranslateProps) => (
+  <TextLabel
+    type="T02"
+    value={t('app.settings.label')}
+    shouldTranslate={false}
+  />
+));
 
 export class Settings extends React.Component<ISettingsProps> {
   state = defaultSettingsValues;
@@ -47,80 +56,27 @@ export class Settings extends React.Component<ISettingsProps> {
     });
   }
 
-  updateHeaderBackgroundColor = (backgroundColor: string) => {
+  updateHeaderBackgroundColorWithBiLogger = (biLogger: IExampleBILogger) = (backgroundColor: string) => {
+    biLogger.exampleBILog();
     this.props.Wix.Styles.setColorParam('backgroundColor', {
       value: { color: false, opacity: 1, rgba: backgroundColor },
     });
     this.setState({ backgroundColor });
   };
-
-  updateButtonBackgroundColor = (buttonBackgroundColor: string) => {
-    this.props.Wix.Styles.setColorParam('buttonBackgroundColor', {
-      value: { color: false, opacity: 1, rgba: buttonBackgroundColor },
-    });
-    this.setState({ buttonBackgroundColor });
-  };
-
-  updateHeaderFontSizeWithLogger = (biLogger: IExampleBILogger) => (
-    fontSize: string,
-  ) => {
-    biLogger.exampleBILog();
-    this.props.Wix.Styles.setFontParam('fontSize', {
-      value: {
-        family: 'roboto-bold',
-        fontStyleParam: true,
-        preset: 'Custom',
-        size: Number(fontSize),
-        style: { bold: false, italic: false, underline: false },
-        value: `font:normal normal normal ${fontSize}px/1em roboto-bold,roboto,sans-serif;`,
-      },
-    });
-    this.setState({ fontSize });
-  };
-
   render() {
     return (
       <div>
         <section className={css.section}>
-          <TextLabel
-            type="T02"
-            value="Background color"
-            shouldTranslate={false}
-          />
+          <SettingsLabel />
           <div className={css.colorPicker}>
-            <ColorPickerColorSpace
-              onChange={this.updateHeaderBackgroundColor}
-              value={this.state.backgroundColor}
-            />
-          </div>
-        </section>
-        <Divider long={true} />
-        <section className={css.section}>
-          <TextLabel
-            type="T02"
-            value="Font size (px)"
-            shouldTranslate={false}
-          />
-          <BILogger>
-            {(logger: IExampleBILogger) => (
-              <Slider
-                value={this.state.fontSize}
-                onChange={this.updateHeaderFontSizeWithLogger(logger)}
-              />
-            )}
-          </BILogger>
-        </section>
-        <section className={css.section}>
-          <TextLabel
-            type="T02"
-            value="Button Background color"
-            shouldTranslate={false}
-          />
-          <div className={css.colorPicker}>
-            <ColorPickerColorSpace
-              onChange={this.updateButtonBackgroundColor}
-              value={this.state.buttonBackgroundColor}
-            />
+            <BILogger>
+              {(logger: IExampleBILogger) => (
+                <ColorPickerColorSpace
+                  onChange={this.updateHeaderBackgroundColorWithBiLogger(logger)}
+                  value={this.state.backgroundColor}
+                />
+              )}
+            </BILogger>
           </div>
         </section>
       </div>
@@ -130,6 +86,17 @@ export class Settings extends React.Component<ISettingsProps> {
 
 export default () => (
   <BILoggerProvider logger={biLogger}>
-    <WixSDK isEditor>{({ Wix }) => <Settings Wix={Wix} />}</WixSDK>
+    <WixSDK isEditor>
+      {({ Wix }) => (
+        <I18nextProvider
+          i18n={i18n({
+            language: getLanguageWithInstance(Wix),
+            waitForReact: true,
+          })}
+        >
+          <Settings Wix={Wix} />
+        </I18nextProvider>
+      )}
+    </WixSDK>
   </BILoggerProvider>
 );
