@@ -56,8 +56,10 @@ export class Settings extends React.Component<ISettingsProps> {
     });
   }
 
-  updateHeaderBackgroundColorWithBiLogger = (biLogger: IExampleBILogger) = (backgroundColor: string) => {
-    biLogger.exampleBILog();
+  updateHeaderBackgroundColorWithBiLogger = (logger: IExampleBILogger) => (
+    backgroundColor: string,
+  ) => {
+    logger.exampleBILog();
     this.props.Wix.Styles.setColorParam('backgroundColor', {
       value: { color: false, opacity: 1, rgba: backgroundColor },
     });
@@ -72,7 +74,9 @@ export class Settings extends React.Component<ISettingsProps> {
             <BILogger>
               {(logger: IExampleBILogger) => (
                 <ColorPickerColorSpace
-                  onChange={this.updateHeaderBackgroundColorWithBiLogger(logger)}
+                  onChange={this.updateHeaderBackgroundColorWithBiLogger(
+                    logger,
+                  )}
                   value={this.state.backgroundColor}
                 />
               )}

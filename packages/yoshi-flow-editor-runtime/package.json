@@ -14,8 +14,6 @@
     "@wix/native-components-infra": "^1.0.668",
     "@wix/platform-editor-sdk": "^0.0.921",
     "@wix/wix-base-ui": "^3.0.0",
-    "@wix/web-bi-logger": "^2.0.853",
-    "@wix/iframe-app-bi-logger": "^1.0.604",
     "@wix/wix-experiments": "3.0.442",
     "@sentry/browser": "^5.15.5",
     "prop-types": "^15.7.2",
