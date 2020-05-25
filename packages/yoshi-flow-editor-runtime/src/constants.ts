@@ -1,5 +1,5 @@
 export const DEFAULT_WIX_SDK_SRC =
-  'https://static.parastorage.com/services/js-sdk/1.469.0/js/wix.min.js';
+  'https://static.parastorage.com/services/js-sdk/1.469.0/js/wix-private.min.js';
 
 export const OOI_WIDGET_COMPONENT_TYPE = 'WIDGET_OUT_OF_IFRAME';
 export const PLATFORM_WIDGET_COMPONENT_TYPE = 'STUDIO_WIDGET';
